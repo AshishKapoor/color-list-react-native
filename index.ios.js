@@ -1,7 +1,7 @@
 /**
- * Sample React Native App
+ * Color List By Ashish Kapoor
  * https://github.com/facebook/react-native
- * @flow
+ * @SwiftObjc
  */
 
 import React, { Component } from 'react';
