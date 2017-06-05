@@ -24,7 +24,7 @@ class App extends Component {
           renderScene={(route, navigator) => {
             switch (route.name) {
               case 'Color Info':
-                return <ColorInfo backgroundColor={route.color}/>
+                return <ColorInfo backgroundColor={route.color} onSelect={() => navigator.pop()}/>
               default :
                 return <ColorList onColorSelected={
                   (color) => navigator.push({
