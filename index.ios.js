@@ -8,7 +8,8 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  ScrollView
+  ListView,
+  Text
 } from 'react-native'
 
 import ColorButton from './components/ColorButton'
@@ -16,8 +17,22 @@ import ColorButton from './components/ColorButton'
 export default class ColorList extends Component {
   constructor() {
     super()
+    this.ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    })
+    const availableColors = [
+      'red', 
+      'green', 
+      'yellow',
+      'pink',
+      'salmon',
+      'black',
+      'white',
+      ]
     this.state = { 
-      backgroundColor: 'blue'
+      backgroundColor: 'blue',
+      availableColors,
+      dataSource: this.ds.cloneWithRows(availableColors)
     }
     this.changeColor = this.changeColor.bind(this)    
   }
@@ -27,19 +42,16 @@ export default class ColorList extends Component {
   }
 
   render() {
-    const { backgroundColor } = this.state
+    const { backgroundColor, dataSource } = this.state
     return (
-      <ScrollView style={[ styles.container, { backgroundColor } ]}>
-        <ColorButton backgroundColor="red" onSelect= { this.changeColor } />
-        <ColorButton backgroundColor="green" onSelect= { this.changeColor } />
-        <ColorButton backgroundColor="blue" onSelect= { this.changeColor } />
-        <ColorButton backgroundColor="yellow" onSelect= { this.changeColor } />
-        <ColorButton backgroundColor="orange" onSelect= { this.changeColor } />
-        <ColorButton backgroundColor="pink" onSelect= { this.changeColor } />
-        <ColorButton backgroundColor="black" onSelect= { this.changeColor } />
-        <ColorButton backgroundColor="gray" onSelect= { this.changeColor } />
+      <ListView 
+      style={[ styles.container, { backgroundColor } ]}
+      dataSource={dataSource}
+      renderRow={(color) => ( <ColorButton backgroundColor={color} onSelect= { this.changeColor } /> )}
+      renderHeader={() => <Text style={styles.header}>Color List</Text>}
+      >
 
-      </ScrollView>
+      </ListView>
     )
   }
 }
@@ -47,7 +59,13 @@ export default class ColorList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20
+  },
+  header: {
+    color: 'lightgrey',
+    paddingTop: 20,
+    padding: 10,
+    fontSize: 30,
+    textAlign: 'center'
   }
 })
 
