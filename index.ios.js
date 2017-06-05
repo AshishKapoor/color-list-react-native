@@ -8,11 +8,11 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  ListView,
-  Text
+  ListView
 } from 'react-native'
 
 import ColorButton from './components/ColorButton'
+import ColorForm from './components/ColorForm'
 
 export default class ColorList extends Component {
   constructor() {
@@ -21,13 +21,7 @@ export default class ColorList extends Component {
       rowHasChanged: (r1, r2) => r1 !== r2
     })
     const availableColors = [
-      'red', 
-      'green', 
-      'yellow',
-      'pink',
-      'salmon',
-      'black',
-      'white',
+      'red', 'purple'
       ]
     this.state = { 
       backgroundColor: 'blue',
@@ -35,10 +29,22 @@ export default class ColorList extends Component {
       dataSource: this.ds.cloneWithRows(availableColors)
     }
     this.changeColor = this.changeColor.bind(this)    
+    this.newColor = this.newColor.bind(this)    
   }
 
   changeColor(backgroundColor) {
     this.setState({ backgroundColor })
+  }
+
+  newColor(color) {
+    const availableColors = [
+      ...this.state.availableColors,
+      color
+    ]
+    this.setState ({
+      availableColors,
+      dataSource: this.ds.cloneWithRows(availableColors)
+    })
   }
 
   render() {
@@ -47,8 +53,14 @@ export default class ColorList extends Component {
       <ListView 
       style={[ styles.container, { backgroundColor } ]}
       dataSource={dataSource}
-      renderRow={(color) => ( <ColorButton backgroundColor={color} onSelect= { this.changeColor } /> )}
-      renderHeader={() => <Text style={styles.header}>Color List</Text>}
+      renderRow={(color) => ( 
+        <ColorButton 
+        backgroundColor={color} 
+        onSelect= { this.changeColor } /> 
+        )}
+      renderHeader={() => ( 
+        <ColorForm style={styles.header} onNewColor={this.newColor}>Color List</ColorForm>
+      )}
       >
 
       </ListView>
