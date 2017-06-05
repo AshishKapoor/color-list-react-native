@@ -1,53 +1,108 @@
 /**
- * Sample React Native App
+ * ColorList By Ashish Kapoor
  * https://github.com/facebook/react-native
- * @flow
+ * @SwiftObjc
  */
 
 import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Text,
-  View
-} from 'react-native';
+  ListView,
+  AsyncStorage
+} from 'react-native'
+
+import ColorButton from './components/ColorButton'
+import ColorForm from './components/ColorForm'
 
 export default class ColorList extends Component {
+  constructor() {
+    super()
+    this.ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    })
+    const availableColors = []
+    this.state = { 
+      backgroundColor: 'blue',
+      availableColors,
+      dataSource: this.ds.cloneWithRows(availableColors)
+    }
+    this.changeColor = this.changeColor.bind(this)    
+    this.newColor = this.newColor.bind(this)    
+  }
+
+  componentDidMount () {
+    AsyncStorage.getItem(
+      '@ColorListStore:Colors',
+      (err, data) => {
+        if (err) {
+          console.error('Error loading colors...',err)
+        } else {
+          const availableColors = JSON.parse(data)
+          this.setState({
+            availableColors,
+            dataSource: this.ds.cloneWithRows(availableColors)
+          })
+        }
+      }
+    )
+  }
+
+  saveColors (colors) {
+    AsyncStorage.setItem(
+      '@ColorListStore:Colors',
+      JSON.stringify(colors)
+    )
+  }
+
+  changeColor(backgroundColor) {
+    this.setState({ backgroundColor })
+  }
+
+  newColor(color) {
+    const availableColors = [
+      ...this.state.availableColors,
+      color
+    ]
+    this.setState ({
+      availableColors,
+      dataSource: this.ds.cloneWithRows(availableColors)
+    })
+    this.saveColors(availableColors)
+  }
+
   render() {
+    const { backgroundColor, dataSource } = this.state
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
+      <ListView 
+      style={[ styles.container, { backgroundColor } ]}
+      dataSource={dataSource}
+      renderRow={(color) => ( 
+        <ColorButton 
+        backgroundColor={color} 
+        onSelect= { this.changeColor } /> 
+        )}
+      renderHeader={() => ( 
+        <ColorForm style={styles.header} onNewColor={this.newColor}>Color List</ColorForm>
+      )}
+      >
+
+      </ListView>
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  header: {
+    color: 'lightgrey',
+    paddingTop: 20,
+    padding: 10,
+    fontSize: 30,
+    textAlign: 'center'
+  }
+})
 
-AppRegistry.registerComponent('ColorList', () => ColorList);
+AppRegistry.registerComponent('ColorList', () => ColorList)
