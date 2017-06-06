@@ -7,12 +7,17 @@ import {
 } from 'react-native'
 
 const ColorButton = ({ backgroundColor, onSelect=f=>f }) => (
-    <TouchableHighlight style={ styles.button } 
-            onPress={ () => onSelect( backgroundColor ) }
-            underlayColor="orange">
-        <View style={ styles.row }> 
-          <View style={[ styles.sample, { backgroundColor }]}/>
-          <Text style={ styles.text }> { backgroundColor } </Text>
+    <TouchableHighlight 
+    style={ styles.button } 
+    onPress={ () => onSelect( backgroundColor ) }
+    underlayColor="orange">
+        <View 
+        style={ styles.row }> 
+          <View 
+          style={[ styles.sample, { backgroundColor }]}/>
+          <Text 
+          style={ styles.text }> { backgroundColor } 
+          </Text>
         </View>
     </TouchableHighlight>
 )

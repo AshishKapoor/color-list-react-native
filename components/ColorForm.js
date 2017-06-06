@@ -21,14 +21,25 @@ export default class ColorForm extends Component {
     }
     render() {
         return (
-            <View style={styles.container}>
+            <View 
+            style={styles.container}>
+
                 <TextInput 
-                    style={styles.textInput} 
-                    placeholder="Enter a color..." 
-                    onChangeText={(txtColor) => this.setState({ txtColor })} 
-                    value={this.state.txtColor
-                }/>
-            <Text style={styles.button} onPress={this.submit} >Add</Text>
+                style={styles.textInput} 
+                placeholder="Enter a color..." 
+                onChangeText={(txtColor) => this.setState({ txtColor })} 
+                value={this.state.txtColor}
+                />
+
+                <Text 
+                style={styles.button} 
+                onPress={this.submit}> Add
+                </Text>
+                
+                <Text 
+                style={styles.button} 
+                onPress={this.props.onInfoButtonPress}>Info
+                </Text>
 
             </View>
         )

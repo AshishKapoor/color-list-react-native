@@ -72,14 +72,15 @@ export default class ColorList extends Component {
       dataSource={dataSource}
       renderRow={(color) => ( 
         <ColorButton 
-         backgroundColor={color} 
-         onSelect= { this.props.onColorSelected } /> 
-        )}
-      renderHeader={() => ( 
-        <ColorForm style={styles.header} onNewColor={this.newColor}>Color List</ColorForm>
+        backgroundColor={color} 
+        onSelect= { this.props.onColorSelected } /> 
       )}
-      >
-
+      renderHeader={() => ( 
+        <ColorForm 
+        style={styles.header} 
+        onNewColor={this.newColor}
+        onInfoButtonPress={this.props.onInfoButtonPress}/>
+      )}>
       </ListView>
     )
   }

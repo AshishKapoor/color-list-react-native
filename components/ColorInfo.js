@@ -12,9 +12,12 @@ import ColorTools from 'color'
 const ColorInfo = ({ backgroundColor, onSelect=f=>f }) => {
     const color = ColorTools(backgroundColor).negate()
     return (
-        <TouchableHighlight style= { [styles.container, {backgroundColor} ]}
+        <TouchableHighlight 
+        style= { [styles.container, {backgroundColor} ]}
         onPress={onSelect}>
-            <Text style={[styles.text, {color}]}> {backgroundColor} </Text>
+            <Text 
+            style={[styles.text, {color}]}> {backgroundColor} 
+            </Text>
         </TouchableHighlight>
     )
 }
